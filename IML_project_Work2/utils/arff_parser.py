@@ -7,6 +7,7 @@ from sklearn.preprocessing import normalize, StandardScaler
 
 
 def arff_to_df_normalized(content) -> object:
+    global num_columns
     data = arff.loadarff(content)  # With this we can work with datasets in format arff
     # Create a new variable to store the names of the headings for each column
     data_names = []
