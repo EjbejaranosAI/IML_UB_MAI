@@ -32,9 +32,14 @@ df_normalized, data_names_num, data_names_cat, data_names, class_names = arff_pa
 model = pca(2)
 model.fit(df_normalized)
 data_reduced = model.transform()
-print(data_reduced)
+print(df_normalized)
 
 
 plt.figure()
+plt.subplot(1,2,1)
+plt.title('Dimensions reduced by PCA')
 plt.scatter(data_reduced[:, 0], data_reduced[:, 1])
+plt.subplot(1,2,2)
+plt.title('First two dimensions')
+plt.scatter(df_normalized[data_names[0]], df_normalized[data_names[1]])
 plt.show()
