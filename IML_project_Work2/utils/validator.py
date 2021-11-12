@@ -1,13 +1,13 @@
 # Return most frequent element in the list
 from matplotlib import pyplot as plt
-from sklearn import metrics
+from sklearn.metrics import silhouette_score, adjusted_rand_score
 import numpy as np
 
 def most_frequent(list):
     return max(set(list), key = list.count)
 
 # Validate clustering
-def validation(class_names,labels):
+def validation(class_names,labels,data):
     labels_dict = {}
     labels_index_dict = {}
     classes = []
@@ -77,8 +77,9 @@ def validation(class_names,labels):
     print(confusion_matrix)
 
     # Calculate adjusted rand index for each class
-    accuracy_ari = metrics.rand_score(list(class_names), labels_list)
-    return accuracy, accuracy_ari
+    accuracy_ari = adjusted_rand_score(list(class_names), labels_list)
+    accuracy_sil = silhouette_score(data,labels)
+    return accuracy, accuracy_ari, accuracy_sil
 
 # Plot accuracy on a bar plot where x = class_names, y = accuracy
 def plot_accuracy(accuracy, class_names):

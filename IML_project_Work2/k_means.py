@@ -92,10 +92,11 @@ model.fit(num_data)
 
 classified_data = model.predict(num_data)
 
-accuracy, accuracy_ari = validation(classes, classified_data)
+accuracy, accuracy_ari,accuracy_sil = validation(classes, classified_data,data)
 
 print(f"accuracy: {accuracy}")
 print(f"accuracy_ari: {accuracy_ari}")
+print(f"accuracy_sil: {accuracy_sil}")
 
 plot_accuracy(accuracy, list(classes.unique()))
 
