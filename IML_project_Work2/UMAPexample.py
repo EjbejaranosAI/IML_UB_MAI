@@ -1,8 +1,8 @@
 import sklearn.cluster as cluster
-import umap.umap_ as umap
 import matplotlib.pyplot as plt
 import umap
-from Projects.IML_UB_MAI.IML_project_Work2.utils.arff_parser import arff_to_df_normalized
+from utils.arff_parser import arff_to_df_normalized
+
 
 CONTENT = 'datasets/vehicle.arff'
 # CONTENT = 'datasets/adult.arff'
@@ -12,7 +12,7 @@ print(df_normalized.head())
 
 X = df = df_normalized.to_numpy()
 
-# Standar data
+# Standard data
 standard_embedding = umap.UMAP(random_state=42).fit_transform(X.data)
 # PLot standar data
 plt.scatter(standard_embedding[:, 0], standard_embedding[:, 1], s=0.1, cmap='Spectral')
@@ -24,9 +24,8 @@ kmeans_labels = cluster.KMeans(n_clusters=10).fit_predict(X.data)
 
 # Plot Kmeans
 plt.scatter(standard_embedding[:, 0], standard_embedding[:, 1], s=0.1, cmap='Spectral')
-plt.title('STANDARD DATASET')
 plt.scatter(standard_embedding[:, 0], standard_embedding[:, 1], c=kmeans_labels, s=0.1, cmap='Spectral')
-plt.title('KMEANS')
+plt.title('KMEANS DATASET')
 plt.show()
 
 # UMAP CLUSTER
@@ -36,6 +35,8 @@ plt.show()
 When we cluster the data in high dimensions we can visualize the result of that clustering. 
 First, however, we’ll view the data colored by the digit that each data point 
 represents – we’ll use a different color for each digit. This will help frame what follows.'''
+
+
 
 # mnist = fetch_openml('mnist_784', version=1)
 # mnist.target = mnist.target.astype(int)
@@ -56,13 +57,8 @@ print('This is the shape before to embedding hte dataset: ', clusterable_embeddi
 # mnist.target = mnist.target.astype(int)
 
 plt.scatter(clusterable_embedding[:, 0], clusterable_embedding[:, 1], s=0.1, cmap='Spectral')
-plt.title('UMAP Cluster')
 plt.scatter(standard_embedding[:, 0], standard_embedding[:, 1], s=0.1, cmap='Spectral')
-plt.title('STANDARD DATASET')
+plt.title('UMAP Cluster')
 plt.show()
+print(len(standard_embedding))
 print('THere is the end of cluster UMAP')
-
-
-##Function
-
-
