@@ -37,17 +37,11 @@ class PCA:
         return data_reduced
 
 
-content = "datasets/vehicle.arff"
-df_normalized, data_names_num, data_names_cat, data_names, class_names = arff_parser.arff_to_df_normalized(content)
+content = "datasets/adult.arff"
+df_normalized, data_num_idxs, data_cat_idxs, data_names, classes = arff_parser.arff_to_df_normalized(content)
 
-try:
-    df_normalized[list(itemgetter(*data_names_cat)(data_names))] = df_normalized[list(itemgetter(*data_names_cat)(data_names))].astype('category')
-    df_normalized[list(itemgetter(*data_names_cat)(data_names))] = df_normalized[list(itemgetter(*data_names_cat)(data_names))].apply(lambda x: x.cat.codes)
-    scalar = StandardScaler()
-    df_scaled = scalar.fit_transform(df_normalized[list(itemgetter(*data_names_cat)(data_names))])
-    df_normalized[list(itemgetter(*data_names_cat)(data_names))] = normalize(df_scaled)
-except:
-    pass
+df_normalized = df_normalized[list(itemgetter(*data_num_idxs)(data_names))].to_numpy(dtype='float32')
+print(df_normalized)
 
 model = PCA(2)
 model.fit(df_normalized)
@@ -65,7 +59,7 @@ plt.scatter(data_reduced[:, 0], data_reduced[:, 1], s = 0.1)
 plt.subplot(1, 3, 1)
 plt.title('First two dimensions')
 plt.gca().set_aspect('equal', adjustable='box')
-plt.scatter(df_normalized[data_names[0]], df_normalized[data_names[1]], s = 0.1)
+plt.scatter(df_normalized[:,0], df_normalized[:,1], s = 0.1)
 plt.subplot(1, 3, 3)
 plt.title('Dimensions reduced by PCA-sklearn')
 plt.gca().set_aspect('equal', adjustable='box')
