@@ -1,5 +1,9 @@
+from operator import itemgetter
+
 import numpy as np
 from matplotlib import pyplot as plt
+from sklearn.preprocessing import StandardScaler, normalize
+
 from utils import arff_parser
 from sklearn.decomposition import PCA as PCA_sklearn
 
@@ -19,6 +23,7 @@ class PCA:
         # compute the eigen values and eigen vectors of the covariance matrix
         eigen_val, eigen_vec = np.linalg.eig(covariance_mat)
         eigen_vec = eigen_vec.transpose()
+        print('Eigen values:',eigen_val)
         # return indexes of the eigen values in descending order (highest variability first)
         eigen_index = np.argsort(eigen_val)[::-1]
         # sort the eigen vectors by highest variability
@@ -35,6 +40,15 @@ class PCA:
 content = "datasets/vehicle.arff"
 df_normalized, data_names_num, data_names_cat, data_names, class_names = arff_parser.arff_to_df_normalized(content)
 
+try:
+    df_normalized[list(itemgetter(*data_names_cat)(data_names))] = df_normalized[list(itemgetter(*data_names_cat)(data_names))].astype('category')
+    df_normalized[list(itemgetter(*data_names_cat)(data_names))] = df_normalized[list(itemgetter(*data_names_cat)(data_names))].apply(lambda x: x.cat.codes)
+    scalar = StandardScaler()
+    df_scaled = scalar.fit_transform(df_normalized[list(itemgetter(*data_names_cat)(data_names))])
+    df_normalized[list(itemgetter(*data_names_cat)(data_names))] = normalize(df_scaled)
+except:
+    pass
+
 model = PCA(2)
 model.fit(df_normalized)
 data_reduced = model.transform()
@@ -47,15 +61,15 @@ plt.figure()
 plt.subplot(1, 3, 2)
 plt.title('Dimensions reduced by PCA')
 plt.gca().set_aspect('equal', adjustable='box')
-plt.scatter(data_reduced[:, 0], data_reduced[:, 1])
+plt.scatter(data_reduced[:, 0], data_reduced[:, 1], s = 0.1)
 plt.subplot(1, 3, 1)
 plt.title('First two dimensions')
 plt.gca().set_aspect('equal', adjustable='box')
-plt.scatter(df_normalized[data_names[0]], df_normalized[data_names[1]])
+plt.scatter(df_normalized[data_names[0]], df_normalized[data_names[1]], s = 0.1)
 plt.subplot(1, 3, 3)
 plt.title('Dimensions reduced by PCA-sklearn')
 plt.gca().set_aspect('equal', adjustable='box')
-plt.scatter(data_reduced_sklearn[:, 0], data_reduced_sklearn[:, 1])
+plt.scatter(data_reduced_sklearn[:, 0], data_reduced_sklearn[:, 1], s = 0.1)
 plt.tight_layout()
 plt.show()
 
