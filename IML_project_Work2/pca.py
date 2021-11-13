@@ -41,7 +41,6 @@ content = "datasets/adult.arff"
 df_normalized, data_num_idxs, data_cat_idxs, data_names, classes = arff_parser.arff_to_df_normalized(content)
 
 df_normalized = df_normalized[list(itemgetter(*data_num_idxs)(data_names))].to_numpy(dtype='float32')
-print(df_normalized)
 
 model = PCA(2)
 model.fit(df_normalized)
