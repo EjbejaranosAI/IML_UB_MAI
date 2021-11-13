@@ -1,11 +1,8 @@
 from operator import itemgetter
-
 import numpy as np
 from matplotlib import pyplot as plt
-from sklearn.preprocessing import StandardScaler, normalize
-
-from utils import arff_parser
 from sklearn.decomposition import PCA as PCA_sklearn
+from utils import arff_parser
 
 
 class PCA:
@@ -34,35 +31,54 @@ class PCA:
     def transform(self):
         # reduce the dimensionality of the data bu creating a dot product
         data_reduced = np.dot(self.data_mean_sub, self.new_components.transpose())
+        data_reduced = data_reduced.transpose()
         return data_reduced
 
-
-content = "datasets/adult.arff"
+# import the data and convert it to a pandas dataframe
+content = "datasets/cmc.arff"
 df_normalized, data_num_idxs, data_cat_idxs, data_names, classes = arff_parser.arff_to_df_normalized(content)
 
+# delete categorical data
 df_normalized = df_normalized[list(itemgetter(*data_num_idxs)(data_names))].to_numpy(dtype='float32')
 
+# Perform dimensionality reduction by our PCA class
 model = PCA(2)
 model.fit(df_normalized)
 data_reduced = model.transform()
 
+# Perform dimensionality reduction by sklearn PCA class
 model_sklearn = PCA_sklearn(2)
 model_sklearn.fit(df_normalized)
 data_reduced_sklearn = model_sklearn.transform(df_normalized)
+data_reduced_sklearn = data_reduced_sklearn.transpose()
 
+# transpose data for visualisation purposes
+df_normalized = df_normalized.transpose()
+
+#visualise data
 plt.figure()
-plt.subplot(1, 3, 2)
-plt.title('Dimensions reduced by PCA')
-plt.gca().set_aspect('equal', adjustable='box')
-plt.scatter(data_reduced[:, 0], data_reduced[:, 1], s = 0.1)
-plt.subplot(1, 3, 1)
-plt.title('First two dimensions')
-plt.gca().set_aspect('equal', adjustable='box')
-plt.scatter(df_normalized[:,0], df_normalized[:,1], s = 0.1)
-plt.subplot(1, 3, 3)
-plt.title('Dimensions reduced by PCA-sklearn')
-plt.gca().set_aspect('equal', adjustable='box')
-plt.scatter(data_reduced_sklearn[:, 0], data_reduced_sklearn[:, 1], s = 0.1)
+ax1 = plt.subplot(1, 3, 1)
+ax1.set_title('First two dimensions')
+ax1.set_aspect('equal', adjustable='box')
+ax2 = plt.subplot(1, 3, 2)
+ax2.set_title('Dimensions reduced by PCA')
+ax2.set_aspect('equal', adjustable='box')
+ax3 = plt.subplot(1, 3, 3)
+ax3.set_title('Dimensions reduced by PCA-sklearn')
+ax3.set_aspect('equal', adjustable='box')
+
+# assign colours to every class
+color = []
+for c in range(0,len(set(classes))):
+    color.append(np.random.rand(3,))
+
+# plot the datapoints with respect to their classes
+for i, Class in enumerate(set(classes)):
+    ax1.scatter(df_normalized[0][classes == Class], df_normalized[1][classes == Class], color=color[i], alpha=0.3, s = 5)
+    ax2.scatter(data_reduced[0][classes == Class], data_reduced[1][classes == Class], color=color[i], alpha=0.3, s = 5)
+    ax3.scatter(data_reduced_sklearn[0][classes == Class], data_reduced_sklearn[1][classes == Class], color=color[i], alpha=0.3, s = 5)
+
+# show plots
 plt.tight_layout()
 plt.show()
 
