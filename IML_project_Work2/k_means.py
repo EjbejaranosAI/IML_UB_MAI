@@ -3,13 +3,12 @@ from operator import itemgetter
 
 import numpy as np
 from matplotlib import pyplot as plt
-from tqdm import tqdm
 
 from utils.arff_parser import arff_to_df_normalized
 from utils.validator import validation, plot_accuracy
 
-
 CONTENT = 'datasets/cmc.arff'
+
 
 class KMeans:
     def __init__(self, k=2, tol=0.00001, max_iter=300):
@@ -24,7 +23,7 @@ class KMeans:
         for i in range(self.k):
             self.centroids[i] = data[i]
 
-        for i in tqdm(range(self.max_iter)):
+        for i in range(self.max_iter):
 
             self.classifications = {}
 
@@ -81,9 +80,8 @@ class KMeans:
         return classifications
 
 
-data, data_num_idxs, data_cat_idxs, names, classes = arff_to_df_normalized(CONTENT)
+num_data, names, classes = arff_to_df_normalized(CONTENT)
 
-num_data = data[list(itemgetter(*data_num_idxs)(names))].to_numpy(dtype='float32')
 model = KMeans(k=5, max_iter=1000)
 
 model.elbow(num_data)
@@ -92,7 +90,7 @@ model.fit(num_data)
 
 classified_data = model.predict(num_data)
 
-accuracy, accuracy_ari,accuracy_sil = validation(classes, classified_data,data)
+accuracy, accuracy_ari, accuracy_sil = validation(classes, classified_data, num_data)
 
 print(f"Adjusted Rand Index: {accuracy_ari}")
 print(f"Silhouette Score: {accuracy_sil}")

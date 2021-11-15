@@ -3,7 +3,7 @@ from operator import itemgetter
 import numpy as np
 import pandas as pd
 from scipy.io import arff
-from sklearn.preprocessing import normalize, StandardScaler
+from sklearn.preprocessing import normalize, StandardScaler, LabelEncoder
 
 
 def arff_to_df_normalized(content) -> object:
@@ -42,8 +42,6 @@ def arff_to_df_normalized(content) -> object:
         else:
             cat_data = [row[data_names_cat[0]].decode('UTF-8') if isinstance(row[data_names_cat[0]], np.bytes_) else row[data_names_cat[0]]]
 
-
-
         df_num.loc[i] = pd.Series(num_data, index=num_columns)
         df_cat.loc[i] = pd.Series(cat_data, index=cat_columns)
 
@@ -51,18 +49,20 @@ def arff_to_df_normalized(content) -> object:
 
     # df.to_csv('adults.csv')
 
-    # Normalize the data
-    scalar = StandardScaler()
-    df_scaled = scalar.fit_transform(df_num)
-    df_normalized = normalize(df_scaled)
-    df_normalized = pd.DataFrame(df_normalized)
-    df[list(itemgetter(*data_names_num)(data_names))] = df_normalized
-
-    # if we have categorical data update it in our df
-    if len(data_names_cat[:-1]) > 0:
-        df[list(itemgetter(*data_names_cat[:])(data_names))] = df_cat
+    # encode every categorical data
+    for index in data_names_cat[:-1]:
+        df[data_names[index]] = LabelEncoder().fit_transform(df[data_names[index]])
 
     # Delete the non-numerical data
     class_names = df.pop('class')
 
-    return df, data_names_num, data_names_cat[:-1], data_names[:-1], class_names
+    # remove "class" from data names
+    data_names = data_names[:-1]
+
+    # Normalize the data
+    scalar = StandardScaler()
+    df_scaled = scalar.fit_transform(df)
+    df_normalized = normalize(df_scaled)
+    df_normalized = pd.DataFrame(df_normalized, columns=data_names)
+
+    return df_normalized, data_names, class_names

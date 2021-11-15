@@ -20,7 +20,7 @@ class PCA:
         # compute the eigen values and eigen vectors of the covariance matrix
         eigen_val, eigen_vec = np.linalg.eig(covariance_mat)
         eigen_vec = eigen_vec.transpose()
-        print('Eigen values:',eigen_val)
+        print('Eigen values:', eigen_val)
         # return indexes of the eigen values in descending order (highest variability first)
         eigen_index = np.argsort(eigen_val)[::-1]
         # sort the eigen vectors by highest variability
@@ -34,12 +34,10 @@ class PCA:
         data_reduced = data_reduced.transpose()
         return data_reduced
 
+
 # import the data and convert it to a pandas dataframe
 content = "datasets/cmc.arff"
-df_normalized, data_num_idxs, data_cat_idxs, data_names, classes = arff_parser.arff_to_df_normalized(content)
-
-# delete categorical data
-df_normalized = df_normalized[list(itemgetter(*data_num_idxs)(data_names))].to_numpy(dtype='float32')
+df_normalized, data_names, classes = arff_parser.arff_to_df_normalized(content)
 
 # Perform dimensionality reduction by our PCA class
 model = PCA(2)
@@ -55,7 +53,7 @@ data_reduced_sklearn = data_reduced_sklearn.transpose()
 # transpose data for visualisation purposes
 df_normalized = df_normalized.transpose()
 
-#visualise data
+# visualise data
 plt.figure()
 ax1 = plt.subplot(1, 3, 1)
 ax1.set_title('First two dimensions')
@@ -69,16 +67,15 @@ ax3.set_aspect('equal', adjustable='box')
 
 # assign colours to every class
 color = []
-for c in range(0,len(set(classes))):
-    color.append(np.random.rand(3,))
+for c in range(0, len(set(classes))):
+    color.append(np.random.rand(3, ))
 
 # plot the datapoints with respect to their classes
 for i, Class in enumerate(set(classes)):
-    ax1.scatter(df_normalized[0][classes == Class], df_normalized[1][classes == Class], color=color[i], alpha=0.3, s = 5)
-    ax2.scatter(data_reduced[0][classes == Class], data_reduced[1][classes == Class], color=color[i], alpha=0.3, s = 5)
-    ax3.scatter(data_reduced_sklearn[0][classes == Class], data_reduced_sklearn[1][classes == Class], color=color[i], alpha=0.3, s = 5)
+    ax1.scatter(df_normalized[0][classes == Class], df_normalized[1][classes == Class], color=color[i], alpha=0.3, s=5)
+    ax2.scatter(data_reduced[0][classes == Class], data_reduced[1][classes == Class], color=color[i], alpha=0.3, s=5)
+    ax3.scatter(data_reduced_sklearn[0][classes == Class], data_reduced_sklearn[1][classes == Class], color=color[i], alpha=0.3, s=5)
 
 # show plots
 plt.tight_layout()
 plt.show()
-

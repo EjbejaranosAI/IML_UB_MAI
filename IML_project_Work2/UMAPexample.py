@@ -4,16 +4,17 @@ import umap
 from utils.arff_parser import arff_to_df_normalized
 
 
-CONTENT = 'datasets/vehicle.arff'
+CONTENT = 'datasets/vowel.arff'
+# CONTENT = 'datasets/vehicle.arff'
 # CONTENT = 'datasets/adult.arff'
-df_normalized, data_num_names, data_cat_names, data_names, class_names = arff_to_df_normalized(CONTENT)
+df_normalized, data_names, class_names = arff_to_df_normalized(CONTENT)
 
 print(df_normalized.head())
 
 X = df = df_normalized.to_numpy()
 
 # Standard data
-standard_embedding = umap.UMAP(random_state=42).fit_transform(X.data)
+standard_embedding = umap.UMAP(random_state=42).fit_transform(X)
 # PLot standar data
 plt.scatter(standard_embedding[:, 0], standard_embedding[:, 1], s=0.1, cmap='Spectral')
 plt.title('STANDARD DATASET')
