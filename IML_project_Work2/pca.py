@@ -52,6 +52,7 @@ data_reduced_sklearn = data_reduced_sklearn.transpose()
 
 # transpose data for visualisation purposes
 df_normalized = df_normalized.transpose()
+print(df_normalized)
 
 # visualise data
 plt.figure()
@@ -66,15 +67,16 @@ ax3.set_title('Dimensions reduced by PCA-sklearn')
 ax3.set_aspect('equal', adjustable='box')
 
 # assign colours to every class
+colors = ['#FF3333', '#AAFF33', '#33FFCA', '#FF9133', '#33BDFF', '#0400FF', '#D400FF', '#FF008D', '#FFF633']
 color = []
 for c in range(0, len(set(classes))):
-    color.append(np.random.rand(3, ))
+    color.append(colors[c])
 
 # plot the datapoints with respect to their classes
 for i, Class in enumerate(set(classes)):
-    ax1.scatter(df_normalized[0][classes == Class], df_normalized[1][classes == Class], color=color[i], alpha=0.3, s=5)
-    ax2.scatter(data_reduced[0][classes == Class], data_reduced[1][classes == Class], color=color[i], alpha=0.3, s=5)
-    ax3.scatter(data_reduced_sklearn[0][classes == Class], data_reduced_sklearn[1][classes == Class], color=color[i], alpha=0.3, s=5)
+    ax1.scatter(df_normalized.iloc[0][classes == Class], df_normalized.iloc[1][classes == Class], color=color[i], alpha=0.6, s=5)
+    ax2.scatter(data_reduced[0][classes == Class], data_reduced[1][classes == Class], color=color[i], alpha=0.6, s=5)
+    ax3.scatter(data_reduced_sklearn[0][classes == Class], data_reduced_sklearn[1][classes == Class], color=color[i], alpha=0.6, s=5)
 
 # show plots
 plt.tight_layout()
