@@ -4,10 +4,11 @@ from operator import itemgetter
 import numpy as np
 from matplotlib import pyplot as plt
 
+from pca import PCA
 from utils.arff_parser import arff_to_df_normalized
 from utils.validator import validation, plot_accuracy
 
-CONTENT = 'datasets/cmc.arff'
+CONTENT = 'datasets/vehicle.arff'
 
 
 class KMeans:
@@ -80,21 +81,36 @@ class KMeans:
         return classifications
 
 
-num_data, names, classes = arff_to_df_normalized(CONTENT)
+def run_clustering_on_reduced():
+    # import the data and convert it to a pandas dataframe
+    df_normalized, data_names, classes = arff_to_df_normalized(CONTENT)
 
-model = KMeans(k=5, max_iter=1000)
+    # Perform dimensionality reduction by our PCA class
+    # pca = PCA(2)
+    # pca.fit(df_normalized)
+    # data_reduced = pca.transform().transpose()
 
-model.elbow(num_data)
+    model = KMeans(k=8, max_iter=1000)
 
-model.fit(num_data)
+    model.fit(df_normalized)
 
-classified_data = model.predict(num_data)
+    classified_data = model.predict(df_normalized)
 
-accuracy, accuracy_ari, accuracy_sil = validation(classes, classified_data, num_data)
+    accuracy, accuracy_ari, accuracy_sil = validation(classes, classified_data, df_normalized)
 
-print(f"Adjusted Rand Index: {accuracy_ari}")
-print(f"Silhouette Score: {accuracy_sil}")
+    print(f"Adjusted Rand Index: {accuracy_ari}")
+    print(f"Silhouette Score: {accuracy_sil}")
 
-plot_accuracy(accuracy, list(classes.unique()))
+    plot_accuracy(accuracy, list(classes.unique()))
+    # colors = ['#FF3333', '#AAFF33', '#33FFCA', '#FF9133', '#33BDFF', '#0400FF', '#D400FF', '#FF008D', '#FFF633']
+    # alpha = 0.6
+    # size = 5
+    #
+    # plt.figure()
+    # for i, Class in enumerate(set(classes)):
+    #     plt.scatter(classified_data[0][classes == Class], classified_data[1][classes == Class], color=colors[i], alpha=alpha, s=size)
+    # print(classified_data)
 
-print(classified_data)
+
+if __name__ == '__main__':
+    run_clustering_on_reduced()

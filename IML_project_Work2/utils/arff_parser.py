@@ -47,7 +47,6 @@ def arff_to_df_normalized(content) -> object:
 
         df.loc[i] = pd.Series(list(row), index=data_names)
 
-    # df.to_csv('adults.csv')
 
     # encode every categorical data
     for index in data_names_cat[:-1]:
@@ -64,5 +63,4 @@ def arff_to_df_normalized(content) -> object:
     df_scaled = scalar.fit_transform(df)
     df_normalized = normalize(df_scaled)
     df_normalized = pd.DataFrame(df_normalized, columns=data_names)
-
     return df_normalized, data_names, class_names

@@ -36,61 +36,66 @@ class PCA:
         return data_reduced
 
 
-# import the data and convert it to a pandas dataframe
-content = "datasets/cmc.arff"
-df_normalized, data_names, classes = arff_parser.arff_to_df_normalized(content)
+def run_reduction():
+    # import the data and convert it to a pandas dataframe
+    content = "datasets/adult.arff"
+    df_normalized, data_names, classes = arff_parser.arff_to_df_normalized(content)
 
-# Perform dimensionality reduction by our PCA class
-model = PCA(2)
-model.fit(df_normalized)
-data_reduced = model.transform()
+    # Perform dimensionality reduction by our PCA class
+    model = PCA(2)
+    model.fit(df_normalized)
+    data_reduced = model.transform()
 
-# Perform dimensionality reduction by sklearn PCA class
-model_sklearn = PCA_sklearn(2)
-model_sklearn.fit(df_normalized)
-data_reduced_sklearn = model_sklearn.transform(df_normalized)
-data_reduced_sklearn = data_reduced_sklearn.transpose()
+    # Perform dimensionality reduction by sklearn PCA class
+    model_sklearn = PCA_sklearn(2)
+    model_sklearn.fit(df_normalized)
+    data_reduced_sklearn = model_sklearn.transform(df_normalized)
+    data_reduced_sklearn = data_reduced_sklearn.transpose()
 
-# Perform dimensionality reduction by sklearn Incremental PCA class
-model_sklearn_incremental = PCA_incremental_sklearn(2)
-model_sklearn_incremental.fit(df_normalized)
-data_reduced_sklearn_incremental = model_sklearn_incremental.transform(df_normalized)
-data_reduced_sklearn_incremental = data_reduced_sklearn_incremental.transpose()
+    # Perform dimensionality reduction by sklearn Incremental PCA class
+    model_sklearn_incremental = PCA_incremental_sklearn(2)
+    model_sklearn_incremental.fit(df_normalized)
+    data_reduced_sklearn_incremental = model_sklearn_incremental.transform(df_normalized)
+    data_reduced_sklearn_incremental = data_reduced_sklearn_incremental.transpose()
 
-# transpose data for visualisation purposes
-df_normalized = df_normalized.transpose()
+    # transpose data for visualisation purposes
+    df_normalized = df_normalized.transpose()
 
-# visualise data
-plt.figure()
-ax1 = plt.subplot(2, 2, 1)
-ax1.set_title('First two dimensions')
-ax1.set_aspect('equal', adjustable='box')
-ax2 = plt.subplot(2, 2, 2)
-ax2.set_title('Dimensions reduced by PCA')
-ax2.set_aspect('equal', adjustable='box')
-ax3 = plt.subplot(2, 2, 3)
-ax3.set_title('Dimensions reduced by PCA-sklearn')
-ax3.set_aspect('equal', adjustable='box')
-ax4 = plt.subplot(2, 2, 4)
-ax4.set_title('Dimensions reduced by IncrementalPCA-sklearn')
-ax4.set_aspect('equal', adjustable='box')
+    # visualise data
+    plt.figure()
+    ax1 = plt.subplot(2, 2, 1)
+    ax1.set_title('First two dimensions')
+    ax1.set_aspect('equal', adjustable='box')
+    ax2 = plt.subplot(2, 2, 2)
+    ax2.set_title('Dimensions reduced by PCA')
+    ax2.set_aspect('equal', adjustable='box')
+    ax3 = plt.subplot(2, 2, 3)
+    ax3.set_title('Dimensions reduced by PCA-sklearn')
+    ax3.set_aspect('equal', adjustable='box')
+    ax4 = plt.subplot(2, 2, 4)
+    ax4.set_title('Dimensions reduced by IncrementalPCA-sklearn')
+    ax4.set_aspect('equal', adjustable='box')
 
-# assign colours to every class
-colors = ['#FF3333', '#AAFF33', '#33FFCA', '#FF9133', '#33BDFF', '#0400FF', '#D400FF', '#FF008D', '#FFF633']
-color = []
-for c in range(0, len(set(classes))):
-    color.append(colors[c])
+    # assign colours to every class
+    colors = ['#FF3333', '#AAFF33', '#33FFCA', '#FF9133', '#33BDFF', '#0400FF', '#D400FF', '#FF008D', '#FFF633']
+    color = []
+    for c in range(0, len(set(classes))):
+        color.append(colors[c])
 
-alpha = 0.6
-size = 5
-# plot the datapoints with respect to their classes
-for i, Class in enumerate(set(classes)):
-    ax1.scatter(df_normalized.iloc[0][classes == Class], df_normalized.iloc[1][classes == Class], color=color[i], alpha=alpha, s=size)
-    ax2.scatter(data_reduced[0][classes == Class], data_reduced[1][classes == Class], color=color[i], alpha=alpha, s=size)
-    ax3.scatter(data_reduced_sklearn[0][classes == Class], data_reduced_sklearn[1][classes == Class], color=color[i], alpha=alpha, s=size)
-    ax4.scatter(data_reduced_sklearn_incremental[0][classes == Class], data_reduced_sklearn_incremental[1][classes == Class], color=color[i],
-                alpha=alpha, s=size)
+    alpha = 0.6
+    size = 5
+    # plot the datapoints with respect to their classes
+    for i, Class in enumerate(set(classes)):
+        ax1.scatter(df_normalized.iloc[0][classes == Class], df_normalized.iloc[1][classes == Class], color=color[i], alpha=alpha, s=size)
+        ax2.scatter(data_reduced[0][classes == Class], data_reduced[1][classes == Class], color=color[i], alpha=alpha, s=size)
+        ax3.scatter(data_reduced_sklearn[0][classes == Class], data_reduced_sklearn[1][classes == Class], color=color[i], alpha=alpha, s=size)
+        ax4.scatter(data_reduced_sklearn_incremental[0][classes == Class], data_reduced_sklearn_incremental[1][classes == Class], color=color[i],
+                    alpha=alpha, s=size)
 
-# show plots
-plt.tight_layout()
-plt.show()
+    # show plots
+    plt.tight_layout()
+    plt.show()
+
+
+if __name__ == '__main__':
+    run_reduction()
