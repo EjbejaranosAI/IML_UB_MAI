@@ -9,6 +9,9 @@ import hdbscan
 import sklearn.cluster as cluster
 from sklearn.metrics import adjusted_rand_score, adjusted_mutual_info_score
 from Projects.IML_UB_MAI.IML_project_Work2.utils.arff_parser import arff_to_df_normalized
+import time
+
+tic = time.perf_counter()
 
 
 dataset = 'datasets/vehicle.arff'
@@ -30,9 +33,9 @@ color = ['#FF3333', '#AAFF33', '#33FFCA', '#FF9133', '#33BDFF', '#0400FF', '#D40
 for i, Class in enumerate(set(classes)):
     plt.scatter(standard_embedding_normalize[:, 0][classes == Class],standard_embedding_normalize[:, 1][classes == Class], cmap='Spectral', s=0.8, c = color[i])
 plt.gca().set_aspect('equal', 'datalim')
-plt.suptitle('UMAP REDUCER FOR CMC DATASET')
+plt.suptitle('UMAP REDUCER FOR VEHICLE DATASET')
 plt.show()
-
+#The following clustering was only to compare and visualize different groups and methods before applying UMAP
 #Kmeans clustering
 kmeans_labels = cluster.KMeans(n_clusters=4).fit_predict(df_normalized)
 
@@ -42,15 +45,15 @@ kmeans_labels_normalize = (kmeans_labels - kmeans_labels_min)/(kmeans_labels_max
 
 
 plt.scatter(standard_embedding_normalize[:, 0], standard_embedding_normalize[:, 1], c=kmeans_labels_normalize, s=0.8, cmap='Spectral');
-plt.suptitle('UMAP REDUCER AND KMEANS CLUSTERING FOR CMC DATASET ')
+plt.suptitle('UMAP REDUCER AND KMEANS CLUSTERING FOR VEHICLE DATASET ')
 plt.show()
 
 # UMAP Clustering
 
 clusterable_embedding = umap.UMAP(
-    n_neighbors=30,
+    n_neighbors=20,
     min_dist=0.0,
-    n_components=2,
+    n_components=4,
     random_state=42,
 ).fit_transform(df_normalized)
 
@@ -61,5 +64,8 @@ clusterable_embedding_normalize = (clusterable_embedding - clusterable_embedding
 for i, Class in enumerate(set(classes)):
     plt.scatter(clusterable_embedding_normalize[:, 0][classes == Class],clusterable_embedding_normalize[:, 1][classes == Class], cmap='Spectral', s=0.8, c = color[i])
 plt.gca().set_aspect('equal', 'datalim')
-plt.suptitle('UMAP CLUSTERING FOR CMC DATASET')
+plt.suptitle('UMAP CLUSTERING FOR VEHICLE DATASET')
 plt.show()
+
+toc = time.perf_counter()
+print(f"Time to execute UMAP reduction and then clustering by UMAP : {toc - tic:0.4f} seconds")

@@ -3,10 +3,14 @@ import matplotlib.pyplot as plt
 import umap
 from Projects.IML_UB_MAI.IML_project_Work2.utils.arff_parser import arff_to_df_normalized
 
+import time
+
+tic = time.perf_counter()
 data = 'datasets/vehicle.arff'
 #data = 'datasets/cmc.arff'
 #data = 'datasets/adult.arff'   #Don't use this dataset yet, not is working
-print(data)
+
+
 df_normalized, data_names, classes = arff_to_df_normalized(data)
 
 print(df_normalized.shape)
@@ -37,7 +41,7 @@ print('the color that we have are:',color)
 for i, Class in enumerate(set(classes)):
     plt.scatter(embedding_normalize[:, 0][classes == Class],embedding_normalize[:, 1][classes == Class], cmap='Spectral', s=0.8, c = color[i])
 plt.gca().set_aspect('equal', 'datalim')
-plt.suptitle('UMAP REDUCER FOR CMC DATASET')
+plt.suptitle('UMAP REDUCER FOR VEHICLE DATASET')
 
 
 
@@ -51,5 +55,6 @@ maxElement_normalize = numpy.amax(embedding_normalize)
 print(maxElement)
 print(maxElement_normalize)
 
-
+toc = time.perf_counter()
+print(f"Time to execute UMAP reduction: {toc - tic:0.4f} seconds")
 
