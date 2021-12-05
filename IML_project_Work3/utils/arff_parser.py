@@ -53,7 +53,7 @@ def arff_to_df_normalized(content) -> object:
         df[data_names[index]] = LabelEncoder().fit_transform(df[data_names[index]])
 
     # Delete the non-numerical data
-    class_names = df.pop('class')
+    labels = df.pop('class')
 
     # remove "class" from data names
     data_names = data_names[:-1]
@@ -63,4 +63,4 @@ def arff_to_df_normalized(content) -> object:
     df_scaled = scalar.fit_transform(df)
     df_normalized = normalize(df_scaled)
     df_normalized = pd.DataFrame(df_normalized, columns=data_names)
-    return df_normalized, data_names, class_names
+    return df_normalized, labels, data_names
