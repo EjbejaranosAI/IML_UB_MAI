@@ -34,7 +34,7 @@ class ModelEvaluator:
             model.print_results()
 
         # print evaluation results
-        self._print_evaluation_results()
+        self._print_evaluation_results(algorithm)
 
     # load normalized data
     def _load_dataset(self, dataset_name, fold, mode):
@@ -44,7 +44,8 @@ class ModelEvaluator:
         return data.to_numpy(), labels
 
     # print evaluation results
-    def _print_evaluation_results(self):
+    def _print_evaluation_results(self, algorithm):
         print('\n\n\n')
+        print(f'Final Results of the {algorithm} Algorithm:')
         print(f'Mean accuracy of the model is: {sum(self.accuracy) * 100 / len(self.accuracy)}%')
         print(f'Execution time for evaluation is: {self.time}')
