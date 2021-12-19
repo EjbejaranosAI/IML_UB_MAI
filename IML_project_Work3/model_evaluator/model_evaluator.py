@@ -2,6 +2,7 @@ from ib.ib import IB
 from utils.arff_parser import arff_to_df_normalized
 
 
+
 class ModelEvaluator:
     def __init__(self):
         self.dataset_path = 'datasetsCBR'
@@ -68,3 +69,6 @@ class ModelEvaluator:
         mean_value = self._calculate_mean(array)
         variance = sum([(val - mean_value) ** 2 for val in array]) / (len(array) - 1)
         return variance
+
+
+
