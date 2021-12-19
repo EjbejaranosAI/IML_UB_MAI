@@ -7,10 +7,13 @@ class ModelEvaluator:
         self.dataset_path = 'datasetsCBR'
         self.accuracy = []
         self.time = 0
+        self.perfomance = {}
 
     def evaluate_model(self, algorithm, dataset_name):
         self.accuracy = []
+        self.memories = []
         self.time = 0
+        self.perfomance[algorithm] = {}
 
         for fold in range(10):
             model = IB(algorithm)
@@ -26,12 +29,20 @@ class ModelEvaluator:
             # calculate test accuracy and save
             self.accuracy.append(model.calculate_accuracy())
 
+            # get memories used
+            self.memories.append(model.get_memory())
+
             # save evaluation time
             self.time += model.time
 
             # print results
             print(f"\n\nModel:{algorithm} \tFold:{fold} \n")
             model.print_results()
+
+        self.perfomance[algorithm]['accuracy'] = self._calculate_mean(self.accuracy)
+        self.perfomance[algorithm]['variance'] = self._calculate_variance(self.accuracy)
+        self.perfomance[algorithm]['time'] = self.time
+        self.perfomance[algorithm]['memory'] = self._calculate_mean(self.memories)
 
         # print evaluation results
         self._print_evaluation_results(algorithm)
@@ -49,3 +60,11 @@ class ModelEvaluator:
         print(f'Final Results of the {algorithm} Algorithm:')
         print(f'Mean accuracy of the model is: {sum(self.accuracy) * 100 / len(self.accuracy)}%')
         print(f'Execution time for evaluation is: {self.time}')
+
+    def _calculate_mean(self, array):
+        return sum(array) / len(array)
+
+    def _calculate_variance(self, array):
+        mean_value = self._calculate_mean(array)
+        variance = sum([(val - mean_value) ** 2 for val in array]) / (len(array) - 1)
+        return variance
