@@ -1,8 +1,8 @@
 import numpy as np
 from scipy.spatial import distance
-distance.cityblock()
-labels = np.array([1,1,1,3,3,3,3])
-distances = [0.05,0.1, 0.2, 0.3, 0.3, 0.5, 0.8]
+
+labels = np.array([1, 2, 2, 1, 3 ,3, 3])
+distances = [0.05, 0.1, 0.2, 0.2, 0.3, 0.5, 0.7]
 
 def borda(distances, labels):
     k = len(distances)
@@ -27,8 +27,11 @@ def borda(distances, labels):
         if len(duplicate) > 1:
             k = k - 1
         else:
-            where = np.where(max(scores_sum))
-            final_label = lbls[where[0][0]]
+            if len(scores_sum) > 1:
+                where = np.where(max(scores_sum))
+                final_label = lbls[where[0][0]]
+            else:
+                final_label = lbls[0]
             return final_label
 
 b = borda(distances, labels)

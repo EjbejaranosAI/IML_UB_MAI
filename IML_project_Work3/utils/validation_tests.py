@@ -26,6 +26,5 @@ def t_test(dict):
 def friedman_test(dict):
      items = dict_to_list(dict)
      print(items[0])
-     return stats.friedmanchisquare(items)
+     return stats.friedmanchisquare(items[0], items[1])
 
-print(friedman_test(x))
