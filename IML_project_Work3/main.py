@@ -1,5 +1,5 @@
 from model_evaluator.model_evaluator import ModelEvaluator
-from utils.t_test import t_test
+from utils.validation_tests import t_test
 from scipy import stats
 
 if __name__ == '__main__':
