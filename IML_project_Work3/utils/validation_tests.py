@@ -1,6 +1,9 @@
 from scipy import stats
 from scikit_posthocs import posthoc_nemenyi_friedman
 
+def friedman_test(array):
+     return stats.friedmanchisquare(array)
+
 def nemenyi_test(array):
      return posthoc_nemenyi_friedman(array.transpose())
 
