@@ -58,9 +58,14 @@ def arff_to_df_normalized(content) -> object:
     # remove "class" from data names
     data_names = data_names[:-1]
 
-    # Normalize the data
-    scalar = StandardScaler()
-    df_scaled = scalar.fit_transform(df)
-    df_normalized = normalize(df_scaled)
-    df_normalized = pd.DataFrame(df_normalized, columns=data_names)
-    return df_normalized, labels, data_names
+
+
+    # # get the modified names
+    # data_names = [name for name in data_names if name in df.columns]
+    #
+    # # Normalize the data
+    # scalar = StandardScaler()
+    # df_scaled = scalar.fit_transform(df)
+    # df_normalized = normalize(df_scaled)
+    # df_normalized = pd.DataFrame(df_normalized, columns=data_names)
+    return df, labels, data_names

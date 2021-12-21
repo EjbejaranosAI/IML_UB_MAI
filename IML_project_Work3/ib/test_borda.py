@@ -30,9 +30,11 @@ def borda(distances, labels):
             if len(scores_sum) > 1:
                 where = np.where(max(scores_sum))
                 final_label = lbls[where[0][0]]
+                min_index = where[0][0]
             else:
                 final_label = lbls[0]
-            return final_label
+                min_index = 0
+            return min_index
 
 b = borda(distances, labels)
 print(b)

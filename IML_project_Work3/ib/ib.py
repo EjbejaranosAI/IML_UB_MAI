@@ -5,7 +5,7 @@ import numpy as np
 import time
 from scipy.spatial import distance
 
-from ib.voting_policies import most_voted
+from distance_metrics import HVDM
 
 
 class IB:
@@ -25,7 +25,7 @@ class IB:
         self.accuracies = {}
         self.frequencies = {}
 
-    def fit_and_predict(self, dataset, class_labels):
+    def fit_and_predict(self, dataset, class_labels, k=1, distance_metric=None, voting_algorithm=None):
         self.correct_num = 0
         self.dataset_size = len(dataset)
         self.total_size += len(dataset)
@@ -40,7 +40,7 @@ class IB:
 
         start_time = time.perf_counter()  # define starting time
 
-        self.algorithm(dataset, class_labels)  # fit and predict data
+        self.algorithm(dataset, class_labels, k, distance_metric, voting_algorithm)  # fit and predict data
 
         end_time = time.perf_counter()  # define ending time
         self.time = end_time - start_time  # calculate the overall time
@@ -183,15 +183,12 @@ class IB:
         # find euclidean distance between data point and entire cd
         if distance_metric is None:
             distance_matrix = np.linalg.norm(np.array(cd) - data_point, axis=1)
+        elif distance_metric == 'HVDM':
+            distance_matrix = HVDM(np.array(cd), data_point)
         else:
-            distance_matrix = distance_metric(np.array(cd), data_point)
-        # Manhattan distance
-        # distance_matrix = distance.cityblock(np.array(cd),data_point)
-        # canberra distance
-        # distance_matrix = distance.canberra(np.array(cd), data_point)
-        # canberra distance
-        # distance_matrix = distance.canberra(np.array(cd), data_point)
+            distance_matrix = distance.cdist([data_point], np.array(cd), metric=distance_metric)[0]
 
+        # sort distance matrix
         distance_matrix_sorted = np.sort(distance_matrix)[:k]
         # find the indexes of the most similar ones
         min_indices = np.argsort(distance_matrix)[:k]

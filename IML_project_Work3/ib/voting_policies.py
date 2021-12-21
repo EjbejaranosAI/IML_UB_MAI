@@ -55,7 +55,7 @@ def plurality_voted(distances, cd_classes, min_indices):
             # If there are no ties, append the label with most votes
             where = votes_len.index(max(votes_len))
             final_index = votes_ind[where][0]
-            return labels[final_index]
+            return final_index
 
 
 def borda_voted(distances, cd_classes, min_indices):
@@ -92,7 +92,9 @@ def borda_voted(distances, cd_classes, min_indices):
             if len(scores_sum) > 1:
                 where = np.where(max(scores_sum))
                 final_label = lbls[where[0][0]]
+                min_index = where[0][0]
             else:
                 final_label = lbls[0]
-            return final_label
+                min_index = 0
+            return min_index
 
