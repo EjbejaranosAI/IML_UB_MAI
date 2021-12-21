@@ -1,26 +1,10 @@
-import statistics
 import numpy as np
-from math import sqrt
-
 
 def HVDM(array, datapoint):
-    distances = []
-    if len(array) > 1:
-        for row in array:
-            s = []
-            for i, r in enumerate(row):
-                column = list(np.choose(i, array.T))
-                st = statistics.stdev(column)
-                subtract = abs(r - datapoint[i])
-                s.append((subtract / 4 * st) ** 2)
-            distances.append(sqrt(sum(s)))
-    else:
-        s = []
-        for i, r in enumerate(array[0]):
-            subtract = abs(r - datapoint[i])
-            s.append(subtract)
-        distances.append(sqrt(sum(s)))
+    # Calculate column-wise standard deviation in array
+    column_std = np.std(array, axis=0)
+    # Subtract array from datapoint, and divide it by 4*standard deviation
+    subtract = np.abs(np.subtract(array,datapoint))/4*column_std
+    # Return the sum of each row
+    return np.sum(subtract, axis = 1)
 
-    return distances
-
-# print(HVDM(a,point))

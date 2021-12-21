@@ -110,8 +110,8 @@ class ModelEvaluator:
                         time += model.time
 
                         # print results
-                        # print(f"\n\nModel:{algorithm} \tFold:{fold} \n")
-                        # model.print_results()
+                        print(f"\n\nModel:{algorithm} \tFold:{fold} \n")
+                        model.print_results()
 
                     self.k_perfomance[inx]['options'] = {'k': k, 'distance_algorithm': distance_alg, 'voting_policy': voting_policy}
                     self.k_perfomance[inx]['result']['accuracy'] = self._calculate_mean(accuracy)
