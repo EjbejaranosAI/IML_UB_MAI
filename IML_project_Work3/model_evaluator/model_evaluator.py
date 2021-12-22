@@ -15,7 +15,7 @@ class ModelEvaluator:
         self.perfomance = {}
         self.k_perfomance = {}
         self.dataset = {}
-        self.number_of_folds = 3
+        self.number_of_folds = 10
 
         self.memories = []
         self.configuration_matrices = {}
