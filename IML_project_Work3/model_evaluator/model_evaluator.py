@@ -4,6 +4,7 @@ import pandas as pd
 from ib.ib import IB
 from ib.voting_policies import most_voted, plurality_voted, borda_voted
 from utils.arff_parser import arff_to_df_normalized
+from utils.validation_tests import rank_data, nemenyi_test
 
 
 class ModelEvaluator:
@@ -14,7 +15,12 @@ class ModelEvaluator:
         self.perfomance = {}
         self.k_perfomance = {}
         self.dataset = {}
-        self.number_of_folds = 10
+        self.number_of_folds = 3
+
+        self.memories = []
+        self.configuration_matrices = {}
+        self.configuration_mapping = {}
+
         for fold in range(self.number_of_folds):
             # load data
             self.dataset[fold] = {}
@@ -72,6 +78,9 @@ class ModelEvaluator:
     def find_best_configuration(self, algorithm):
         self.accuracy = []
         self.memories = []
+        self.configuration_matrices = {}
+        self.configuration_mapping = {}
+
         self.time = 0
 
         k_options = [1, 3, 5, 7]
@@ -89,7 +98,7 @@ class ModelEvaluator:
                     accuracy = []
                     memories = []
                     time = 0
-                    for fold in range(10):
+                    for fold in range(self.number_of_folds):
                         model = IB(algorithm)
 
                         # load data
@@ -110,8 +119,11 @@ class ModelEvaluator:
                         time += model.time
 
                         # print results
-                        print(f"\n\nModel:{algorithm} \tFold:{fold} \n")
-                        model.print_results()
+                        # print(f"\n\nModel:{algorithm} \tFold:{fold} \n")
+                        # model.print_results()
+
+                    self.configuration_mapping[inx] = {'k': k, 'distance_algorithm': distance_alg, 'voting_policy': voting_policy}
+                    self.configuration_matrices[inx] = accuracy
 
                     self.k_perfomance[inx]['options'] = {'k': k, 'distance_algorithm': distance_alg, 'voting_policy': voting_policy}
                     self.k_perfomance[inx]['result']['accuracy'] = self._calculate_mean(accuracy)
@@ -121,7 +133,8 @@ class ModelEvaluator:
                     print(f'following configurations executed: {self.k_perfomance[inx]["options"]}, '
                           f'mean accuracy: {self.k_perfomance[inx]["result"]["accuracy"]}')
                     inx += 1
-                # print(self.k_perfomance)
+        ranked_data = rank_data(self.configuration_matrices)
+        nemenyi = nemenyi_test(self.configuration_matrices)
 
     # load normalized data
     def _load_dataset(self, dataset_name, fold, mode):

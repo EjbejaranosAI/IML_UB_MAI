@@ -5,7 +5,7 @@ import numpy as np
 import time
 from scipy.spatial import distance
 
-from distance_metrics import HVDM
+from ib.distance_metrics import HVDM
 
 
 class IB:
