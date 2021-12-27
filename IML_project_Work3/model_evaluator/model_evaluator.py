@@ -1,25 +1,26 @@
 from sklearn.preprocessing import normalize, StandardScaler
 import pandas as pd
+import numpy as np
 
 from ib.ib import IB
 from ib.voting_policies import most_voted, plurality_voted, borda_voted
 from utils.arff_parser import arff_to_df_normalized
-from utils.validation_tests import rank_data, nemenyi_test
+from utils.validation_tests import rank_data, nemenyi_test, t_test
 
 
 class ModelEvaluator:
     def __init__(self, dataset):
         self.dataset_path = 'datasetsCBR'
-        self.accuracy = []
         self.time = 0
         self.perfomance = {}
         self.k_perfomance = {}
         self.dataset = {}
         self.number_of_folds = 10
 
-        self.memories = []
         self.configuration_matrices = {}
         self.configuration_mapping = {}
+
+        self.dataset_name = dataset
 
         for fold in range(self.number_of_folds):
             # load data
@@ -38,8 +39,8 @@ class ModelEvaluator:
             print(f'Fold {fold + 1} Loaded')
 
     def evaluate_model(self, algorithm):
-        self.accuracy = []
-        self.memories = []
+        accuracy = []
+        memories = []
         self.time = 0
         self.perfomance[algorithm] = {}
 
@@ -55,25 +56,25 @@ class ModelEvaluator:
             model.fit_and_predict(test_data, test_labels)
 
             # calculate test accuracy and save
-            self.accuracy.append(model.calculate_accuracy())
+            accuracy.append(model.calculate_accuracy())
 
             # get memories used
-            self.memories.append(model.get_memory())
+            memories.append(model.get_memory())
 
             # save evaluation time
             self.time += model.time
 
             # print results
-            print(f"\n\nModel:{algorithm} \tFold:{fold} \n")
+            print(f"\n\nAlgorithm:{algorithm} \tFold:{fold + 1} \n")
             model.print_results()
 
-        self.perfomance[algorithm]['accuracy'] = self._calculate_mean(self.accuracy)
-        self.perfomance[algorithm]['variance'] = self._calculate_variance(self.accuracy)
+        self.perfomance[algorithm]['accuracy'] = self._calculate_mean(accuracy)
+        self.perfomance[algorithm]['variance'] = self._calculate_variance(accuracy)
         self.perfomance[algorithm]['time'] = self.time
-        self.perfomance[algorithm]['memory'] = self._calculate_mean(self.memories)
+        self.perfomance[algorithm]['memory'] = self._calculate_mean(memories)
 
         # print evaluation results
-        self._print_evaluation_results(algorithm)
+        self._print_evaluation_results(algorithm, accuracy)
 
     def find_best_configuration(self, algorithm):
         self.accuracy = []
@@ -136,6 +137,17 @@ class ModelEvaluator:
         ranked_data = rank_data(self.configuration_matrices)
         nemenyi = nemenyi_test(self.configuration_matrices)
 
+    def find_best_ib(self):
+        scores = {}
+        for algorithm in self.perfomance.keys():
+            result = self.perfomance[algorithm]
+
+            scores[algorithm] = result['accuracy'] * 0.9 - result['variance'] * 0.24 * 100 + \
+                                (1 / (result['memory'])) * 0.001 + (1 / (result['time'])) * 0.001
+        best_algorithm = max(scores, key=lambda x: scores[x])
+        print(f'\n\n\nBest Algorithm for "{self.dataset_name}" dataset is: {best_algorithm}')
+        return max(scores, key=lambda x: scores[x])
+
     # load normalized data
     def _load_dataset(self, dataset_name, fold, mode):
         dataset_path = f"{self.dataset_path}/{dataset_name}/{dataset_name}.fold.{fold:06}.{mode}.arff"
@@ -167,10 +179,10 @@ class ModelEvaluator:
         return train_data.to_numpy(), test_data.to_numpy()
 
     # print evaluation results
-    def _print_evaluation_results(self, algorithm):
+    def _print_evaluation_results(self, algorithm, accuracy):
         print('\n\n\n')
         print(f'Final Results of the {algorithm} Algorithm:')
-        print(f'Mean accuracy of the model is: {sum(self.accuracy) * 100 / len(self.accuracy)}%')
+        print(f'Mean accuracy of the model is: {sum(accuracy) * 100 / len(accuracy)}%')
         print(f'Execution time for evaluation is: {self.time}')
 
     def _calculate_mean(self, array):
