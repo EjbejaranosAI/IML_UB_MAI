@@ -33,13 +33,14 @@ feature_names = seg_data.columns
 #print(feature_names)
 X_train.shape, X_test.shape
 # ReliefF will produce scores for all features.
-#print(f'THis is y_train: {y_train}')
-#print(f'This is x_train:{X_train}')
+print(f'THis is y_train: {y_train}')
+print(f'This is x_train:{X_train}')
 
 
 def ReliefMethod(X_data, y_label,k_n):
     print('RESULTS OF RELIEF METHOD:')
     featuresWeights = ReliefF(n_features_to_select=k_n, n_neighbors=20, n_jobs=-1)
+    featuresWeights.fit_transform(X_data, y_label)
     fs = featuresWeights.fit_transform(X_data, y_label)
     #featuresWeights.transform(X_train).shape
     print(f' The shape of the dataset before feature selection: {X_data.shape}')
@@ -52,7 +53,7 @@ def ReliefMethod(X_data, y_label,k_n):
     weights = np.zeros(X_data.shape[1])
     weights[cols] = 1.0
     print(f'The weights for the feature selection are: {weights}')
-    return fs, weights, cols
+    return featuresWeights, weights, cols
 
 
 

@@ -6,7 +6,9 @@ from utils.arff_parser import arff_to_df_normalized
 from utils.validation_tests import rank_data, nemenyi_test
 # Libraries for feature selection
 from sklearn.feature_selection import VarianceThreshold
-#from utils.featureSelection import lowVarFeatures
+
+
+# from utils.featureSelection import lowVarFeatures
 class ModelEvaluator:
     def __init__(self, dataset):
         self.dataset_path = 'datasetsCBR'
@@ -106,8 +108,10 @@ class ModelEvaluator:
                         test_data, test_labels = self.dataset[fold]['test_data'], self.dataset[fold]['test_labels']
 
                         # fit and predict data
-                        model.fit_and_predict(train_data, train_labels, k, distance_algorithms[distance_alg], voting_policies[voting_policy])
-                        model.fit_and_predict(test_data, test_labels, k, distance_algorithms[distance_alg], voting_policies[voting_policy])
+                        model.fit_and_predict(train_data, train_labels, k, distance_algorithms[distance_alg],
+                                              voting_policies[voting_policy])
+                        model.fit_and_predict(test_data, test_labels, k, distance_algorithms[distance_alg],
+                                              voting_policies[voting_policy])
 
                         # calculate test accuracy and save
                         accuracy.append(model.calculate_accuracy())
@@ -122,10 +126,12 @@ class ModelEvaluator:
                         # print(f"\n\nModel:{algorithm} \tFold:{fold} \n")
                         # model.print_results()
 
-                    self.configuration_mapping[inx] = {'k': k, 'distance_algorithm': distance_alg, 'voting_policy': voting_policy}
+                    self.configuration_mapping[inx] = {'k': k, 'distance_algorithm': distance_alg,
+                                                       'voting_policy': voting_policy}
                     self.configuration_matrices[inx] = accuracy
 
-                    self.k_perfomance[inx]['options'] = {'k': k, 'distance_algorithm': distance_alg, 'voting_policy': voting_policy}
+                    self.k_perfomance[inx]['options'] = {'k': k, 'distance_algorithm': distance_alg,
+                                                         'voting_policy': voting_policy}
                     self.k_perfomance[inx]['result']['accuracy'] = self._calculate_mean(accuracy)
                     self.k_perfomance[inx]['result']['variance'] = self._calculate_variance(accuracy)
                     self.k_perfomance[inx]['result']['time'] = time
@@ -193,11 +199,11 @@ class ModelEvaluator:
         return variance
 
 
-
 # This class is for the feature selection
 
 class ModelEvaluatorFeatureSelection:
     print(' This will be implement feature selection algorithm')
+
     def __init__(self, dataset):
         self.dataset_path = 'datasetsCBR'
         self.time = 0
@@ -299,8 +305,10 @@ class ModelEvaluatorFeatureSelection:
                         test_data, test_labels = self.dataset[fold]['test_data'], self.dataset[fold]['test_labels']
 
                         # fit and predict data
-                        model.fit_and_predict(train_data, train_labels, k, distance_algorithms[distance_alg], voting_policies[voting_policy])
-                        model.fit_and_predict(test_data, test_labels, k, distance_algorithms[distance_alg], voting_policies[voting_policy])
+                        model.fit_and_predict(train_data, train_labels, k, distance_algorithms[distance_alg],
+                                              voting_policies[voting_policy])
+                        model.fit_and_predict(test_data, test_labels, k, distance_algorithms[distance_alg],
+                                              voting_policies[voting_policy])
 
                         # calculate test accuracy and save
                         accuracy.append(model.calculate_accuracy())
@@ -315,10 +323,12 @@ class ModelEvaluatorFeatureSelection:
                         # print(f"\n\nModel:{algorithm} \tFold:{fold} \n")
                         # model.print_results()
 
-                    self.configuration_mapping[inx] = {'k': k, 'distance_algorithm': distance_alg, 'voting_policy': voting_policy}
+                    self.configuration_mapping[inx] = {'k': k, 'distance_algorithm': distance_alg,
+                                                       'voting_policy': voting_policy}
                     self.configuration_matrices[inx] = accuracy
 
-                    self.k_perfomance[inx]['options'] = {'k': k, 'distance_algorithm': distance_alg, 'voting_policy': voting_policy}
+                    self.k_perfomance[inx]['options'] = {'k': k, 'distance_algorithm': distance_alg,
+                                                         'voting_policy': voting_policy}
                     self.k_perfomance[inx]['result']['accuracy'] = self._calculate_mean(accuracy)
                     self.k_perfomance[inx]['result']['variance'] = self._calculate_variance(accuracy)
                     self.k_perfomance[inx]['result']['time'] = time

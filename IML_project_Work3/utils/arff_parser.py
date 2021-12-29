@@ -8,7 +8,7 @@ from sklearn.preprocessing import normalize, StandardScaler, LabelEncoder
 
 def arff_to_df_normalized(content) -> object:
     global num_columns
-    data = arff.loadarff(content)  # With this we can work with datasets in format arff
+    data = arff.loadarff(content)  # With this we can work with datasets in arff format
     # Create a new variable to store the names of the headings for each column
     data_names = []
     data_names_num = []
@@ -38,7 +38,7 @@ def arff_to_df_normalized(content) -> object:
         if len(data_names_cat) > 1:
             cat_data = [categorical.decode('UTF-8') if isinstance(categorical, np.bytes_) else categorical for categorical in
                         itemgetter(*data_names_cat)(row)]
-        # if only we have "class"
+        # if we only have "class"
         else:
             cat_data = [row[data_names_cat[0]].decode('UTF-8') if isinstance(row[data_names_cat[0]], np.bytes_) else row[data_names_cat[0]]]
 
