@@ -1,8 +1,8 @@
 from scikit_posthocs import posthoc_nemenyi_friedman
 from scipy import stats
 import numpy as np
-# from scikit_posthocs import posthoc_nemenyi_friedman
 from scipy.stats import rankdata
+
 
 def friedman_test(configuration_file):
     configuration_array = np.array([array for index, array in configuration_file.items()])
@@ -26,6 +26,7 @@ def t_test(array):
         tpvalues.append((t, p))
         print(f'For pair {pii[0]} and {pii[1]}, the p-value was {p} and t-value was {t}')
     return tpvalues
+
 
 def rank_data(configuration_file):
     configuration_array = np.array([array for index, array in configuration_file.items()])

@@ -5,5 +5,4 @@ scikit-learn==1.0.1
 numpy~=1.21.3
 sklearn~=0.0
 scikit_posthocs==0.6.7
-pip install skrebate
 skrebate~=0.62
