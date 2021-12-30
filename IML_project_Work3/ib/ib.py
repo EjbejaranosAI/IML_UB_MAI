@@ -51,10 +51,10 @@ class IB:
         for index, (data_point, label) in enumerate(zip(dataset[1:], class_labels[1:])):
 
             distance_matrix_sorted, min_indices = self._find_k_similar(data_point, self.cd, k, distance_metric)
-            min_index = self._vote(min_indices, distance_matrix_sorted, self.cd_classes, voting_algorithm)
+            vote_label = self._vote(min_indices, distance_matrix_sorted, self.cd_classes, voting_algorithm)
 
             # if it is correctly classified increase the number
-            if label == self.cd_classes[min_index]:
+            if label == vote_label:
                 self.correct_num += 1
 
             # because we already have first data point in cd we are not adding it any more
@@ -68,10 +68,10 @@ class IB:
 
             # find the index of most similar one
             distance_matrix_sorted, min_indices = self._find_k_similar(data_point, self.cd, k, distance_metric)
-            min_index = self._vote(min_indices, distance_matrix_sorted, self.cd_classes, voting_algorithm)
+            vote_label = self._vote(min_indices, distance_matrix_sorted, self.cd_classes, voting_algorithm)
 
             # if it is correctly classified increase the number
-            if label == self.cd_classes[min_index]:
+            if label == vote_label:
                 self.correct_num += 1
             # if it is incorrectly classified add in the cd
             else:
@@ -197,10 +197,10 @@ class IB:
 
     def _vote(self, min_indices, distance_matrix_sorted, cd_classes, voting_algorithm):
         if voting_algorithm is None:
-            min_index = min_indices[0]
+            label = cd_classes[min_indices[0]]
         else:
-            min_index = voting_algorithm(distance_matrix_sorted, cd_classes, min_indices)
-        return min_index
+            label = voting_algorithm(distance_matrix_sorted, cd_classes, min_indices)
+        return label
 
     # calculate accuracy
     def calculate_accuracy(self):

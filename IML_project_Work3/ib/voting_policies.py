@@ -26,7 +26,7 @@ def most_voted(distances, cd_classes, min_indices):
     # resolve the ties by precedence of the labels with the lowest mean distances
     where_min = np.where(mean_distances == min(mean_distances))
     most_voted_label = votes_dup[where_min[0][0]]
-    return most_voted_label[0]
+    return labels[most_voted_label[0]]
 
 
 def plurality_voted(distances, cd_classes, min_indices):
@@ -55,7 +55,7 @@ def plurality_voted(distances, cd_classes, min_indices):
             # If there are no ties, append the label with most votes
             where = votes_len.index(max(votes_len))
             final_index = votes_ind[where][0]
-            return final_index
+            return labels[final_index]
 
 
 def borda_voted(distances, cd_classes, min_indices):
@@ -96,5 +96,5 @@ def borda_voted(distances, cd_classes, min_indices):
             else:
                 final_label = lbls[0]
                 min_index = 0
-            return min_index
+            return labels[min_index]
 
