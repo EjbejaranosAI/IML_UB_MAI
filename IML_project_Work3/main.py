@@ -20,8 +20,8 @@ if __name__ == '__main__':
     # print(model_evaluator.k_perfomance)
 
     # ----------------------FEATURE SELECTION METHODS-----------------------#
-    #model_evaluator.select_features(method='i_gain', number_of_features=10)
-    model_evaluator.select_features(method='relief', number_of_features=5)
+    model_evaluator.select_features(method='i_gain', number_of_features=5)
+    #model_evaluator.select_features(method='relief', number_of_features=10)
 
     # ----------------------BEST HYPOTHYROID PARAMETER---------------------#
     #If you want to test  the dataset hypothyroid , uncomment the lines 29 and 30 and comment 35 and 36
