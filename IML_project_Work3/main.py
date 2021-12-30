@@ -1,10 +1,12 @@
 from model_evaluator.model_evaluator import ModelEvaluator
 
 if __name__ == '__main__':
-    #model_evaluator = ModelEvaluator(dataset='satimage')
-    model_evaluator = ModelEvaluator(dataset='hypothyroid')
+    # ----------------------SATIMAGE DATASET---------------------------------------#
+    model_evaluator = ModelEvaluator(dataset='satimage')
+    # ----------------------HYPOTHYROID DATASET---------------------------------#
+    #model_evaluator = ModelEvaluator(dataset='hypothyroid')
 
-    # model_evaluator = ModelEvaluator(dataset='hypothyroid')
+    # ----------------Uncomment the dataset that you want to use----------------#
 
     # performing evaluation on ibs
     # model_evaluator.evaluate_model(algorithm='ib1')
@@ -17,18 +19,18 @@ if __name__ == '__main__':
     # model_evaluator.find_best_configuration(algorithm=best_algorithm)
     # print(model_evaluator.k_perfomance)
 
-
+    # ----------------------FEATURE SELECTION METHODS-----------------------#
     #model_evaluator.select_features(method='i_gain', number_of_features=10)
-    model_evaluator.select_features(method='relief', number_of_features=10)
+    model_evaluator.select_features(method='relief', number_of_features=5)
 
-    # ----------------------HYPOTHYROID DATASET----------------------------------#
-    #If you want to test  the dataset hypothyroid , uncomment the lines 27 and 28 and comment 33 and 34
+    # ----------------------BEST HYPOTHYROID PARAMETER---------------------#
+    #If you want to test  the dataset hypothyroid , uncomment the lines 29 and 30 and comment 35 and 36
     # Parameters  of calling k_ibl for the hypothyroid dataset
-    model_evaluator.k_ibl(algorithm='ib1', k=3, voting_policy='most_voted', distance_alg='Eucledian', feature_selection=True)
-    model_evaluator.k_ibl(algorithm='ib1', k=3, voting_policy='most_voted', distance_alg='Eucledian', feature_selection=False)
-
-    # ----------------------SATIMAGE DATASET---------------------------------------#
-    # If you want to test  the  satimage dataset, uncomment the lines 30 and 31 and comment 26 and 27
-    # Parameters  of calling k_ibl for the satimage dataset
     #model_evaluator.k_ibl(algorithm='ib1', k=3, voting_policy='most_voted', distance_alg='Eucledian', feature_selection=True)
     #model_evaluator.k_ibl(algorithm='ib1', k=3, voting_policy='most_voted', distance_alg='Eucledian', feature_selection=False)
+
+    # ----------------------BEST SATIMAGE PARAMETER---------------------------#
+    # If you want to test  the  satimage dataset, uncomment the lines 35 and 36 and comment 29 and 30
+    # Parameters  of calling k_ibl for the satimage dataset
+    model_evaluator.k_ibl(algorithm='ib1', k=3, voting_policy='most_voted', distance_alg='Eucledian', feature_selection=True)
+    model_evaluator.k_ibl(algorithm='ib1', k=3, voting_policy='most_voted', distance_alg='Eucledian', feature_selection=False)
