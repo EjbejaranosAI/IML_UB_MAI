@@ -159,8 +159,9 @@ class ModelEvaluator:
     def select_features(self, method, number_of_features):
         data = self.dataset[0]['train_data']
         labels = self.dataset[0]['train_labels']
-        feature_indices = selectionIBLAlgorithm(data, labels, method, number_of_features)
-
+        feature_indices, weights_features, scores = selectionIBLAlgorithm(data, labels, method, number_of_features)
+        print(f'--------------------------The weights for this dataset with feature selections are: -----------{weights_features}--------------------')
+        print(f'--------------------------The relative scores for this dataset with feature selections are: --{scores}----------------------------------')
         for fold in range(self.number_of_folds):
             # load data
 
