@@ -7,5 +7,4 @@ run the following command:
 `pip install -r requirements.txt`
 
 ## Usage
-We have different algorithms in different files. In order to test each algorithm you shold run each file. Choose dataset for the
-algorithm and run the file
+you should visit main file to run all algorithms and analyses
