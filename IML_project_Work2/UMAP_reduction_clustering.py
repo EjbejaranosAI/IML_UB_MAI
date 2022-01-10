@@ -8,14 +8,15 @@ import umap
 import hdbscan
 import sklearn.cluster as cluster
 from sklearn.metrics import adjusted_rand_score, adjusted_mutual_info_score
-from Projects.IML_UB_MAI.IML_project_Work2.utils.arff_parser import arff_to_df_normalized
 import time
+
+from utils.arff_parser import arff_to_df_normalized
 
 tic = time.perf_counter()
 
 
-dataset = 'datasets/vehicle.arff'
-#dataset = 'datasets/cmc.arff'
+# dataset = 'datasets/vehicle.arff'
+dataset = 'datasets/cmc.arff'
 #dataset = 'datasets/adult.arff'
 df_normalized, data_names, classes = arff_to_df_normalized(dataset)
 

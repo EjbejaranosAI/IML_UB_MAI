@@ -9,7 +9,7 @@ from utils.arff_parser import arff_to_df_normalized
 from utils.validator import validation, plot_accuracy
 
 # Read the dataset from a relative path
-content = "datasets/adult.arff"
+content = "datasets/cmc.arff"
 
 # Parse the arff file to a dataframe
 df_normalized, data_names_num, data_names_cat, data_names, class_names = arff_to_df_normalized(content)

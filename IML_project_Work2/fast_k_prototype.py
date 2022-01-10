@@ -5,10 +5,10 @@ import pandas as pd
 import copy
 import tqdm
 
-from utils.arff_parser import arff_to_df_normalized
+from utils.arff_parser import arff_to_df_normalized_num_cat
 from utils.validator import validation, plot_accuracy
 
-CONTENT = 'datasets/adult.arff'
+CONTENT = 'datasets/cmc.arff'
 
 
 class FKPT:
@@ -130,7 +130,7 @@ class FKPT:
         return classifications
 
 
-data, data_num_idxs, data_cat_idxs, names, classes = arff_to_df_normalized(CONTENT)
+data, data_num_idxs, data_cat_idxs, names, classes = arff_to_df_normalized_num_cat(CONTENT)
 
 fktp = FKPT(k=10, categorical_weight=0.2, num_iter=100, tol=0.01)
 fktp.fit(data, data_num_idxs, data_cat_idxs, names)

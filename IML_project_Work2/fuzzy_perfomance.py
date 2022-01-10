@@ -5,9 +5,9 @@ from matplotlib import pyplot as plt
 from numpy import linalg as LA, ndarray
 from utils.arff_parser import arff_to_df_normalized
 
-CONTENT = "datasets/vehicle.arff"
+CONTENT = "datasets/cmc.arff"
 
-df_normalized, data_num_names, data_cat_names, data_names, class_names = arff_to_df_normalized(CONTENT)
+df_normalized, data_names, classes = arff_to_df_normalized(CONTENT)
 
 print(df_normalized.head())
 

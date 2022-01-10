@@ -1,13 +1,14 @@
 import numpy
 import matplotlib.pyplot as plt
 import umap
-from Projects.IML_UB_MAI.IML_project_Work2.utils.arff_parser import arff_to_df_normalized
 
 import time
 
+from utils.arff_parser import arff_to_df_normalized
+
 tic = time.perf_counter()
-data = 'datasets/vehicle.arff'
-#data = 'datasets/cmc.arff'
+# data = 'datasets/vehicle.arff'
+data = 'datasets/cmc.arff'
 #data = 'datasets/adult.arff'   #Don't use this dataset yet, not is working
 
 

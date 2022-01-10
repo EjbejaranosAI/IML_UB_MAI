@@ -38,7 +38,7 @@ class PCA:
 
 def run_reduction():
     # import the data and convert it to a pandas dataframe
-    content = "datasets/adult.arff"
+    content = "datasets/cmc.arff"
     df_normalized, data_names, classes = arff_parser.arff_to_df_normalized(content)
 
     # Perform dimensionality reduction by our PCA class
